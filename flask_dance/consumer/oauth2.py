@@ -190,7 +190,10 @@ class OAuth2ConsumerBlueprint(BaseOAuthConsumerBlueprint):
         elif self.redirect_url:
             next_url = self.redirect_url
         elif self.redirect_to:
-            next_url = url_for(self.redirect_to)
+            if isinstance(self.redirect_to, list):
+                next_url = url_for(self.redirect_to[0], **self.redirect_to[1])
+            else:
+                next_url = url_for(self.redirect_to)
         else:
             next_url = "/"
         log.debug("next_url = %s", next_url)
